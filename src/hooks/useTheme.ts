@@ -1,21 +1,9 @@
-import { useEffect, useState } from "react"
+// hooks/useTheme.ts
+import { useContext } from "react"
+import { ThemeContext } from "../context/ThemeContext"
 
-export function useTheme() {
-    const [theme, setTheme] = useState<"light" | "dark">(() => {
-        // Get saved theme from localStorage or default to light
-        return localStorage.getItem("theme") === "dark" ? "dark" : "light"
-    })
-
-    useEffect(() => {
-        const html = document.documentElement
-        if (theme === "dark") {
-            html.classList.add("dark")
-        } else {
-            html.classList.remove("dark")
-        }
-
-        localStorage.setItem("theme", theme)
-    }, [theme])
-
-    return { theme, setTheme }
+export const useTheme = () => {
+    const ctx = useContext(ThemeContext)
+    if (!ctx) throw new Error("useTheme must be used within ThemeProvider")
+    return ctx
 }

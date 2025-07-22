@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react"
+import React, {useState} from "react"
 import initSqlJs from "sql.js"
 
 import Home from "./views/Home.tsx"
 import Records from "./views/Records.tsx"
 import Other from "./views/Other.tsx"
+
+import {useTheme} from "./hooks/useTheme.ts"
 
 type SqlJsModule = typeof import("sql.js")
 type SqlJsDatabase = InstanceType<SqlJsModule["Database"]>
@@ -13,13 +15,7 @@ function App() {
     const [currentTab, setCurrentTab] = useState("home")
     const [uploadedFileName, setUploadedFileName] = useState<string | null>(null)
 
-    const [theme, setTheme] = useState("theme-light")
-
-    useEffect(() => {
-        const htmlEl = document.documentElement
-        htmlEl.classList.remove("theme-light", "theme-dark")
-        htmlEl.classList.add(theme)
-    }, [theme])
+    const {theme, setTheme} = useTheme()
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
@@ -40,10 +36,10 @@ function App() {
     return (
         <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)] transition-colors duration-300">
             <div className="relative min-h-screen">
-
                 {/* Upload button */}
                 <div className="fixed top-4 right-4 z-50 group">
-                    <label className="inline-block px-3 py-1 bg-[var(--color-text)] text-[var(--color-bg)] text-sm rounded shadow hover:opacity-90 cursor-pointer relative transition-colors duration-300">
+                    <label
+                        className="inline-block px-3 py-1 bg-[var(--color-text)] text-[var(--color-bg)] text-sm rounded shadow hover:opacity-90 cursor-pointer relative transition-colors duration-300">
                         {uploadedFileName || "Play Log DB"}
                         <input
                             type="file"
@@ -51,7 +47,8 @@ function App() {
                             onChange={handleFileChange}
                             className="hidden"
                         />
-                        <div className="absolute top-full mt-1 right-0 group-hover:opacity-100 opacity-0 transition bg-[var(--color-text)] text-[var(--color-bg)] text-xs rounded px-3 py-2 whitespace-nowrap text-left z-50 shadow-lg">
+                        <div
+                            className="absolute top-full mt-1 right-0 group-hover:opacity-100 opacity-0 transition bg-[var(--color-text)] text-[var(--color-bg)] text-xs rounded px-3 py-2 whitespace-nowrap text-left z-50 shadow-lg">
                             Upload a SQLite [.db] or [.sqlite] file
                         </div>
                     </label>
@@ -61,7 +58,7 @@ function App() {
                 <div className="fixed bottom-4 right-4 z-50">
                     <select
                         value={theme}
-                        onChange={(e) => setTheme(e.target.value)}
+                        onChange={(e) => setTheme(e.target.value as "theme-light" | "theme-dark")}
                         className="text-sm bg-[var(--color-bg)] text-[var(--color-text)] border border-[var(--color-text)] px-3 py-1 rounded shadow transition-colors duration-300"
                     >
                         <option value="theme-light">Light Theme</option>
@@ -88,10 +85,11 @@ function App() {
                         ))}
                     </div>
 
-                    <div className="border border-[var(--color-text)] rounded-b-lg bg-[var(--color-bg)] p-4 shadow min-h-[400px] transition-colors duration-300">
-                        {currentTab === "home" && <Home db={db} />}
-                        {currentTab === "records" && <Records db={db} />}
-                        {currentTab === "other" && <Other />}
+                    <div
+                        className="border border-[var(--color-text)] rounded-b-lg bg-[var(--color-bg)] p-4 shadow min-h-[400px] transition-colors duration-300">
+                        {currentTab === "home" && <Home db={db}/>}
+                        {currentTab === "records" && <Records db={db}/>}
+                        {currentTab === "other" && <Other/>}
                     </div>
                 </div>
             </div>
