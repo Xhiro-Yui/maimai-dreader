@@ -23,7 +23,11 @@ const Records: FC<{ db: SqlJsDatabase | null }> = ({ db }) => {
         const offset = (page - 1) * RECORDS_PER_PAGE;
 
         const result = db.exec(`
-            SELECT title, difficulty, achievement, played_at
+            SELECT 
+                title AS "Song Title", 
+                difficulty AS "Difficulty", 
+                achievement AS "Achievement", 
+                played_at AS "Played At"
             FROM playlog
             ORDER BY played_at DESC
             LIMIT ${RECORDS_PER_PAGE}
@@ -34,13 +38,6 @@ const Records: FC<{ db: SqlJsDatabase | null }> = ({ db }) => {
 
         const columns = result[0].columns as string[];
         const values = result[0].values as (string | number | null)[][];
-
-        const headerLabels: Record<string, string> = {
-            title: "Song Title",
-            difficulty: "Difficulty",
-            achievement: "Achievement",
-            played_at: "Played At",
-        };
 
         const rows = values.map((row) =>
             Object.fromEntries(columns.map((col, i) => [col, row[i]])) as Record<string, string | number | null>
@@ -63,7 +60,7 @@ const Records: FC<{ db: SqlJsDatabase | null }> = ({ db }) => {
                     <tr className="bg-blue-100">
                         {columns.map((col) => (
                             <th key={col} className="border px-2 py-1 text-left">
-                                {headerLabels[col] ?? col}
+                                {col}
                             </th>
                         ))}
                     </tr>
