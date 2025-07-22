@@ -1,53 +1,135 @@
-import { type FC } from "react";
+import {type FC, useState, useMemo } from "react";
 
-// Extract the Database constructor type
 type SqlJsModule = typeof import("sql.js");
 type SqlJsDatabase = InstanceType<SqlJsModule["Database"]>;
 
+const RECORDS_PER_PAGE = 100;
+
 const Records: FC<{ db: SqlJsDatabase | null }> = ({ db }) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const [inputPage, setInputPage] = useState("");
+
+    const totalRecords = useMemo(() => {
+        if (!db) return 0;
+        const result = db.exec(`SELECT COUNT(*) as count FROM playlog`);
+        return result[0]?.values?.[0]?.[0] as number;
+    }, [db]);
+
     if (!db) return <p>Please upload a database file.</p>;
 
     try {
+        const totalPages = Math.max(1, Math.ceil(totalRecords / RECORDS_PER_PAGE));
+        const page = Math.max(1, Math.min(currentPage, totalPages));
+        const offset = (page - 1) * RECORDS_PER_PAGE;
+
         const result = db.exec(`
-      SELECT title, difficulty, achievement, played_at
-      FROM playlog
-      ORDER BY played_at DESC
-    `);
+            SELECT title, difficulty, achievement, played_at
+            FROM playlog
+            ORDER BY played_at DESC
+            LIMIT ${RECORDS_PER_PAGE}
+            OFFSET ${offset}
+        `);
 
         if (result.length === 0) return <p>No records found.</p>;
 
-        // Narrow types
         const columns = result[0].columns as string[];
         const values = result[0].values as (string | number | null)[][];
 
-        // Each row is an object with column names as keys
+        const headerLabels: Record<string, string> = {
+            title: "Song Title",
+            difficulty: "Difficulty",
+            achievement: "Achievement",
+            played_at: "Played At",
+        };
+
         const rows = values.map((row) =>
             Object.fromEntries(columns.map((col, i) => [col, row[i]])) as Record<string, string | number | null>
         );
 
+        const visiblePages = Array.from({ length: totalPages }, (_, i) => i + 1).filter(
+            (p) => p >= page - 5 && p <= page + 5
+        );
+
+        const goToPage = (p: number) => {
+            const clamped = Math.max(1, Math.min(p, totalPages));
+            setCurrentPage(clamped);
+            setInputPage("");
+        };
+
         return (
-            <table className="w-full border-collapse mt-2">
-                <thead>
-                <tr className="bg-blue-100">
-                    {columns.map((col) => (
-                        <th key={col} className="border px-2 py-1 text-left">
-                            {col}
-                        </th>
-                    ))}
-                </tr>
-                </thead>
-                <tbody>
-                {rows.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-blue-50">
+            <div className="mt-2">
+                <table className="w-full border-collapse">
+                    <thead>
+                    <tr className="bg-blue-100">
                         {columns.map((col) => (
-                            <td key={col} className="border px-2 py-1">
-                                {String(row[col])}
-                            </td>
+                            <th key={col} className="border px-2 py-1 text-left">
+                                {headerLabels[col] ?? col}
+                            </th>
                         ))}
                     </tr>
-                ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {rows.map((row, idx) => (
+                        <tr key={idx} className="hover:bg-blue-50">
+                            {columns.map((col) => (
+                                <td key={col} className="border px-2 py-1">
+                                    {String(row[col])}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+
+                {/* Pagination controls */}
+                <div className="flex items-center justify-between mt-4">
+                    <div className="space-x-1">
+                        <button
+                            className="px-2 py-1 border rounded disabled:opacity-50"
+                            onClick={() => goToPage(page - 1)}
+                            disabled={page === 1}
+                        >
+                            ← Prev
+                        </button>
+                        {visiblePages.map((p) => (
+                            <button
+                                key={p}
+                                className={`px-2 py-1 border rounded ${
+                                    p === page ? "bg-blue-200 font-bold" : "hover:bg-blue-50"
+                                }`}
+                                onClick={() => goToPage(p)}
+                            >
+                                {p}
+                            </button>
+                        ))}
+                        <button
+                            className="px-2 py-1 border rounded disabled:opacity-50"
+                            onClick={() => goToPage(page + 1)}
+                            disabled={page === totalPages}
+                        >
+                            Next →
+                        </button>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                        <span>Go to page:</span>
+                        <input
+                            type="number"
+                            className="border px-2 py-1 w-20"
+                            value={inputPage}
+                            onChange={(e) => setInputPage(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    const parsed = parseInt(inputPage, 10);
+                                    if (!isNaN(parsed)) goToPage(parsed);
+                                }
+                            }}
+                            min={1}
+                            max={totalPages}
+                        />
+                    </div>
+                </div>
+            </div>
         );
     } catch (e) {
         return <p className="text-red-600">Error querying records: {String(e)}</p>;
