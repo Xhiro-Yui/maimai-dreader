@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+/*noinspection CssInvalidAtRule*/
+@custom-variant dark (&:where(.theme-dark, .theme-dark *)); /* Adjusted to use .theme-dark */
+
+/*noinspection CssInvalidAtRule*/
+@theme {
+    --color-bg: #ffffff;
+    --color-text: #111111;
+}
+
+@layer theme {
+    .theme-dark {
+        --color-bg: #0f172a;
+        --color-text: #f8fafc;
+    }
+}
