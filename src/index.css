@@ -7,11 +7,13 @@
 @theme {
     --color-bg: #ffffff;
     --color-text: #111111;
+    --color-header: #1e3a8a;
 }
 
 @layer theme {
     .theme-dark {
         --color-bg: #0f172a;
         --color-text: #f8fafc;
+        --color-header: #93c5fd;
     }
 }
