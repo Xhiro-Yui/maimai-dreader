@@ -1,4 +1,3 @@
-// Extract the Database constructor type
 type SqlJsModule = typeof import("sql.js");
 type SqlJsDatabase = InstanceType<SqlJsModule["Database"]>;
 
