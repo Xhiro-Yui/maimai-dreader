@@ -28,7 +28,7 @@ const UploadRecords = ({ onDbLoaded }: UploadRecordsProps) => {
     }
 
     return (
-        <div className="fixed top-4 right-4 z-50 group">
+        <div>
             <label className="inline-block px-3 py-1 bg-[var(--color-text)] text-[var(--color-bg)] text-sm rounded shadow hover:opacity-90 cursor-pointer relative transition-colors duration-300">
                 {uploadedFileName || "Play Log DB"}
                 <input

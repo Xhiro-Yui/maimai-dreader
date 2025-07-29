@@ -26,9 +26,11 @@ function App() {
 
     return (
         <Layout>
-            <UploadRecords onDbLoaded={(db) => setDb(db)} />
-            <ThemePicker />
-            <Header />
+            <div className="flex justify-end items-center gap-2 px-4 pt-4">
+                <UploadRecords onDbLoaded={(db) => setDb(db)}/>
+                <ThemePicker/>
+            </div>
+            <Header/>
             <Tabs
                 tabs={tabs}
                 currentTab={currentTab}
