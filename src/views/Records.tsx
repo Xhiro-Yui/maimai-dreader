@@ -142,10 +142,10 @@ const Records: FC<{ db: SqlJsDatabase | null }> = ({db}) => {
                     </div>
                 </div>
             </div>
-        );
+        )
     } catch (e) {
         return <p className="text-red-600">Error querying records: {String(e)}</p>;
     }
-};
+}
 
 export default Records;
