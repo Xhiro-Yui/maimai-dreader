@@ -8,6 +8,13 @@
     --color-bg: #ffffff;
     --color-text: #111111;
     --color-header: #1e3a8a;
+
+    /* Tables */
+    --color-utage-row: #c026d3;
+    --color-master-row: #5b21b6;
+    --color-expert-row: #b91c1c;
+    --color-advanced-row: #b45309;
+    --color-basic-row: #15803d;
 }
 
 @layer theme {
@@ -15,5 +22,20 @@
         --color-bg: #0f172a;
         --color-text: #f8fafc;
         --color-header: #93c5fd;
+
+        /* Tables */
+        --color-utage-row: #ff6ffd;
+        --color-master-row: #c084fc;
+        --color-expert-row: #f87171;
+        --color-advanced-row: #facc15;
+        --color-basic-row: #4ade80;
     }
+}
+
+/* ✨ Remaster Text Glow (light + dark mode compatible) */
+.text-remaster {
+    color: white;
+    text-shadow: 0 0 2px #5b21b6,
+    0 0 4px #7e22ce,
+    0 0 6px #a855f7;
 }

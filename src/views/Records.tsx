@@ -1,11 +1,11 @@
-import {type FC, useState, useMemo } from "react";
+import {type FC, useState, useMemo} from "react";
 
 type SqlJsModule = typeof import("sql.js");
 type SqlJsDatabase = InstanceType<SqlJsModule["Database"]>;
 
 const RECORDS_PER_PAGE = 100;
 
-const Records: FC<{ db: SqlJsDatabase | null }> = ({ db }) => {
+const Records: FC<{ db: SqlJsDatabase | null }> = ({db}) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [inputPage, setInputPage] = useState("");
 
@@ -43,7 +43,7 @@ const Records: FC<{ db: SqlJsDatabase | null }> = ({ db }) => {
             Object.fromEntries(columns.map((col, i) => [col, row[i]])) as Record<string, string | number | null>
         );
 
-        const visiblePages = Array.from({ length: totalPages }, (_, i) => i + 1).filter(
+        const visiblePages = Array.from({length: totalPages}, (_, i) => i + 1).filter(
             (p) => p >= page - 5 && p <= page + 5
         );
 
@@ -66,16 +66,31 @@ const Records: FC<{ db: SqlJsDatabase | null }> = ({ db }) => {
                     </tr>
                     </thead>
                     <tbody>
-                    {rows.map((row, idx) => (
-                        <tr key={idx} className="hover:bg-blue-50">
-                            {columns.map((col) => (
-                                <td key={col} className="border px-2 py-1">
-                                    {String(row[col])}
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
+                    {rows.map((row, idx) => {
+                        const difficulty = String(row["Difficulty"]).toLowerCase();
+
+                        const colorClass = {
+                            utage: "text-[var(--color-utage-row)]",
+                            basic: "text-[var(--color-basic-row)]",
+                            advanced: "text-[var(--color-advanced-row)]",
+                            expert: "text-[var(--color-expert-row)]",
+                            master: "text-[var(--color-master-row)]",
+                            remaster: "text-remaster",
+                        }[difficulty] || "";
+
+                        return (
+                            <tr key={idx} className="hover:bg-blue-50 font-semibold">
+                                {columns.map((col) => (
+                                    <td key={col} className="border px-2 py-1">
+                                        <span className={colorClass}>{String(row[col])}</span>
+                                    </td>
+                                ))}
+                            </tr>
+                        );
+                    })}
                     </tbody>
+
+
                 </table>
 
                 {/* Pagination controls */}
