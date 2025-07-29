@@ -3,8 +3,6 @@ import { type FC, useState, useMemo } from "react";
 type SqlJsModule = typeof import("sql.js");
 type SqlJsDatabase = InstanceType<SqlJsModule["Database"]>;
 
-const RECORDS_PER_PAGE = 100;
-
 const difficultyColorClass: Record<string, string> = {
     utage: "text-[var(--color-utage-row)]",
     basic: "text-[var(--color-basic-row)]",
@@ -15,6 +13,7 @@ const difficultyColorClass: Record<string, string> = {
 };
 
 const Records: FC<{ db: SqlJsDatabase | null }> = ({ db }) => {
+    const [recordsPerPage, setRecordsPerPage] = useState(100);
     const [currentPage, setCurrentPage] = useState(1);
     const [inputPage, setInputPage] = useState("");
 
@@ -24,9 +23,9 @@ const Records: FC<{ db: SqlJsDatabase | null }> = ({ db }) => {
         return result[0]?.values?.[0]?.[0] as number;
     }, [db]);
 
-    const totalPages = Math.max(1, Math.ceil(totalRecords / RECORDS_PER_PAGE));
+    const totalPages = Math.max(1, Math.ceil(totalRecords / recordsPerPage));
     const page = Math.max(1, Math.min(currentPage, totalPages));
-    const offset = (page - 1) * RECORDS_PER_PAGE;
+    const offset = (page - 1) * recordsPerPage;
 
     const goToPage = (p: number) => {
         const clamped = Math.max(1, Math.min(p, totalPages));
@@ -45,7 +44,7 @@ const Records: FC<{ db: SqlJsDatabase | null }> = ({ db }) => {
                 played_at AS "Played At"
             FROM playlog
             ORDER BY played_at DESC
-            LIMIT ${RECORDS_PER_PAGE}
+            LIMIT ${recordsPerPage}
             OFFSET ${offset}
         `);
 
@@ -141,6 +140,23 @@ const Records: FC<{ db: SqlJsDatabase | null }> = ({ db }) => {
                             max={totalPages}
                         />
                     </div>
+                    <div className="flex items-center space-x-2">
+                        <span>Rows per page:</span>
+                        <input
+                            type="number"
+                            className="border px-2 py-1 w-20"
+                            value={recordsPerPage}
+                            min={1}
+                            onChange={(e) => {
+                                const value = parseInt(e.target.value, 10);
+                                if (!isNaN(value) && value > 0) {
+                                    setRecordsPerPage(value);
+                                    setCurrentPage(1); // reset to page 1
+                                }
+                            }}
+                        />
+                    </div>
+
                 </div>
             </div>
         )
