@@ -1,11 +1,20 @@
-import {type FC, useState, useMemo} from "react";
+import { type FC, useState, useMemo } from "react";
 
 type SqlJsModule = typeof import("sql.js");
 type SqlJsDatabase = InstanceType<SqlJsModule["Database"]>;
 
 const RECORDS_PER_PAGE = 100;
 
-const Records: FC<{ db: SqlJsDatabase | null }> = ({db}) => {
+const difficultyColorClass: Record<string, string> = {
+    utage: "text-[var(--color-utage-row)]",
+    basic: "text-[var(--color-basic-row)]",
+    advanced: "text-[var(--color-advanced-row)]",
+    expert: "text-[var(--color-expert-row)]",
+    master: "text-[var(--color-master-row)]",
+    remaster: "text-remaster",
+};
+
+const Records: FC<{ db: SqlJsDatabase | null }> = ({ db }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [inputPage, setInputPage] = useState("");
 
@@ -15,13 +24,19 @@ const Records: FC<{ db: SqlJsDatabase | null }> = ({db}) => {
         return result[0]?.values?.[0]?.[0] as number;
     }, [db]);
 
+    const totalPages = Math.max(1, Math.ceil(totalRecords / RECORDS_PER_PAGE));
+    const page = Math.max(1, Math.min(currentPage, totalPages));
+    const offset = (page - 1) * RECORDS_PER_PAGE;
+
+    const goToPage = (p: number) => {
+        const clamped = Math.max(1, Math.min(p, totalPages));
+        setCurrentPage(clamped);
+        setInputPage("");
+    };
+
     if (!db) return <p>Please upload a database file.</p>;
 
     try {
-        const totalPages = Math.max(1, Math.ceil(totalRecords / RECORDS_PER_PAGE));
-        const page = Math.max(1, Math.min(currentPage, totalPages));
-        const offset = (page - 1) * RECORDS_PER_PAGE;
-
         const result = db.exec(`
             SELECT 
                 title AS "Song Title", 
@@ -38,20 +53,13 @@ const Records: FC<{ db: SqlJsDatabase | null }> = ({db}) => {
 
         const columns = result[0].columns as string[];
         const values = result[0].values as (string | number | null)[][];
-
         const rows = values.map((row) =>
-            Object.fromEntries(columns.map((col, i) => [col, row[i]])) as Record<string, string | number | null>
+            Object.fromEntries(columns.map((col, i) => [col, row[i]]))
         );
 
-        const visiblePages = Array.from({length: totalPages}, (_, i) => i + 1).filter(
+        const visiblePages = Array.from({ length: totalPages }, (_, i) => i + 1).filter(
             (p) => p >= page - 5 && p <= page + 5
         );
-
-        const goToPage = (p: number) => {
-            const clamped = Math.max(1, Math.min(p, totalPages));
-            setCurrentPage(clamped);
-            setInputPage("");
-        };
 
         return (
             <div className="mt-2">
@@ -68,33 +76,25 @@ const Records: FC<{ db: SqlJsDatabase | null }> = ({db}) => {
                     <tbody>
                     {rows.map((row, idx) => {
                         const difficulty = String(row["Difficulty"]).toLowerCase();
-
-                        const colorClass = {
-                            utage: "text-[var(--color-utage-row)]",
-                            basic: "text-[var(--color-basic-row)]",
-                            advanced: "text-[var(--color-advanced-row)]",
-                            expert: "text-[var(--color-expert-row)]",
-                            master: "text-[var(--color-master-row)]",
-                            remaster: "text-remaster",
-                        }[difficulty] || "";
+                        const colorClass = difficultyColorClass[difficulty] ?? "";
 
                         return (
                             <tr key={idx} className="hover:bg-blue-50 font-semibold">
                                 {columns.map((col) => (
                                     <td key={col} className="border px-2 py-1">
-                                        <span className={colorClass}>{String(row[col])}</span>
+                                            <span className={colorClass}>
+                                                {String(row[col])}
+                                            </span>
                                     </td>
                                 ))}
                             </tr>
                         );
                     })}
                     </tbody>
-
-
                 </table>
 
-                {/* Pagination controls */}
                 <div className="flex items-center justify-between mt-4">
+                    {/* Pagination buttons */}
                     <div className="space-x-1">
                         <button
                             className="px-2 py-1 border rounded disabled:opacity-50"
@@ -123,6 +123,7 @@ const Records: FC<{ db: SqlJsDatabase | null }> = ({db}) => {
                         </button>
                     </div>
 
+                    {/* Go to page input */}
                     <div className="flex items-center space-x-2">
                         <span>Go to page:</span>
                         <input
