@@ -32,7 +32,8 @@ const UploadRecords = ({onDbLoaded}: UploadRecordsProps) => {
     return (
         <div>
             <label
-                className="inline-block px-3 py-1 bg-[var(--color-text)] text-[var(--color-bg)] text-sm rounded shadow hover:opacity-90 cursor-pointer relative transition-colors duration-300">
+                className="group inline-block px-3 py-1 bg-[var(--color-text)] text-[var(--color-bg)] text-sm rounded shadow hover:opacity-90 cursor-pointer relative transition-colors duration-300"
+            >
                 {uploadedFileName || "Play Log DB"}
                 <input
                     type="file"
@@ -41,11 +42,17 @@ const UploadRecords = ({onDbLoaded}: UploadRecordsProps) => {
                     className="hidden"
                 />
                 <div
-                    className="absolute top-full mt-1 right-0 group-hover:opacity-100 opacity-0 transition bg-[var(--color-text)] text-[var(--color-bg)] text-xs rounded px-3 py-2 whitespace-nowrap text-left z-50 shadow-lg">
+                    className="absolute left-full top-1/2 -translate-y-1/2 ml-2
+                       group-hover:opacity-100 opacity-0 transition-opacity
+                       bg-[var(--color-text)] text-[var(--color-bg)]
+                       text-xs rounded px-3 py-2 whitespace-nowrap z-50 shadow-lg"
+                >
                     Upload a SQLite [.db] or [.sqlite] file
                 </div>
             </label>
         </div>
+
+
     )
 }
 

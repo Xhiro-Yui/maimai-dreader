@@ -9,6 +9,10 @@
     --color-text: #111111;
     --color-header: #1E3A8A;
 
+    /* Sidebar */
+    --color-sidebar-bg: var(--color-bg);
+    --color-sidebar-text: var(--color-text);
+    --color-hover-bg: #f3f4f6; /* Tailwind gray-100, matches light mode */
     /* Tables */
     --color-utage-row: #C026D3;
     --color-master-row: #5B21B6;
@@ -22,6 +26,11 @@
         --color-bg: #0F172A;
         --color-text: #F8FAFC;
         --color-header: #93C5FD;
+
+        /* Sidebar */
+        --color-sidebar-bg: #1E293B; /* slate-800 */
+        --color-sidebar-text: #F1F5F9; /* slate-100 */
+        --color-hover-bg: #334155; /* slate-700 */
 
         /* Tables */
         --color-utage-row: #FF6FFD;

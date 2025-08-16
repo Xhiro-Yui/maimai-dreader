@@ -1,44 +1,45 @@
-import { useState } from "react"
-
-import Header from "./components/Header"
+import {useEffect, useState} from "react"
+import SidebarLayout from "./components/layout/SidebarLayout"
 import UploadRecords from "./components/UploadRecords"
 import ThemePicker from "./components/ThemePicker"
-import Tabs from "./components/Tabs"
-import Layout from "./components/Layout"
-
 import Home from "./views/Home"
 import Records from "./views/Records"
 import Other from "./views/Other"
-import type {Database} from "sql.js";
+import type {Database} from "sql.js"
 
-type SqlJsDatabase = Database;
+type SqlJsDatabase = Database
 
-function App() {
-    const [db, setDb] = useState<SqlJsDatabase | null>(null)
-    const tabs = ["home", "records", "other"]
-    const [currentTab, setCurrentTab] = useState("home")
+export default function App() {
+    const [db, setDb] = useState<SqlJsDatabase | null>(null);
 
     const views = {
-        home: <Home db={db} />,
-        records: <Records db={db} />,
-        other: <Other />,
-    }
+        Dashboard: <Home db={db}/>,
+        Records: <Records db={db}/>,
+        Other: <Other/>,
+    } as const;
+    type TabName = keyof typeof views;
+    const tabs = Object.keys(views) as TabName[];
+
+    const [currentTab, setCurrentTab] = useState<TabName>(() => {
+        const saved = localStorage.getItem("currentTab") as TabName | null;
+        return saved && tabs.includes(saved) ? saved : tabs[0];
+    });
+
+    useEffect(() => {
+        localStorage.setItem("currentTab", currentTab);
+    }, [currentTab]);
 
     return (
-        <Layout>
-            <div className="flex justify-end items-center gap-2 px-4 pt-4">
-                <UploadRecords onDbLoaded={(db) => setDb(db)}/>
-                <ThemePicker/>
-            </div>
-            <Header/>
-            <Tabs
-                tabs={tabs}
-                currentTab={currentTab}
-                setCurrentTab={setCurrentTab}
-                views={views}
-            />
-        </Layout>
+        <SidebarLayout<TabName>
+            controls={
+                <>
+                    <UploadRecords onDbLoaded={setDb}/>
+                    <ThemePicker/>
+                </>
+            }
+            sidebarTabs={{tabs, currentTab, setCurrentTab}}
+        >
+            {views[currentTab]}
+        </SidebarLayout>
     )
 }
-
-export default App
