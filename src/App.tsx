@@ -9,9 +9,9 @@ import Layout from "./components/Layout"
 import Home from "./views/Home"
 import Records from "./views/Records"
 import Other from "./views/Other"
+import type {Database} from "sql.js";
 
-type SqlJsModule = typeof import("sql.js")
-type SqlJsDatabase = InstanceType<SqlJsModule["Database"]>
+type SqlJsDatabase = Database;
 
 function App() {
     const [db, setDb] = useState<SqlJsDatabase | null>(null)
