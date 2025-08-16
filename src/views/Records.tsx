@@ -1,7 +1,7 @@
-import { type FC, useState, useMemo } from "react";
+import {type FC, useState, useMemo} from "react";
+import type {Database} from "sql.js";
 
-type SqlJsModule = typeof import("sql.js");
-type SqlJsDatabase = InstanceType<SqlJsModule["Database"]>;
+type SqlJsDatabase = Database;
 
 const difficultyColorClass: Record<string, string> = {
     utage: "text-[var(--color-utage-row)]",
@@ -12,7 +12,7 @@ const difficultyColorClass: Record<string, string> = {
     remaster: "text-remaster",
 };
 
-const Records: FC<{ db: SqlJsDatabase | null }> = ({ db }) => {
+const Records: FC<{ db: SqlJsDatabase | null }> = ({db}) => {
     const [recordsPerPage, setRecordsPerPage] = useState(100);
     const [currentPage, setCurrentPage] = useState(1);
     const [inputPage, setInputPage] = useState("");
@@ -56,7 +56,7 @@ const Records: FC<{ db: SqlJsDatabase | null }> = ({ db }) => {
             Object.fromEntries(columns.map((col, i) => [col, row[i]]))
         );
 
-        const visiblePages = Array.from({ length: totalPages }, (_, i) => i + 1).filter(
+        const visiblePages = Array.from({length: totalPages}, (_, i) => i + 1).filter(
             (p) => p >= page - 5 && p <= page + 5
         );
 

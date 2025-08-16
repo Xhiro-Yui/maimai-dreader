@@ -1,7 +1,8 @@
-type SqlJsModule = typeof import("sql.js");
-type SqlJsDatabase = InstanceType<SqlJsModule["Database"]>;
+import type {Database} from "sql.js";
 
-function Home({ db }: { db: SqlJsDatabase | null }) {
+type SqlJsDatabase = Database;
+
+function Home({db}: { db: SqlJsDatabase | null }) {
     if (!db) return <p>Please upload a database file.</p>
 
     try {
