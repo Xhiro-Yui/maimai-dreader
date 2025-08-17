@@ -1,33 +1,32 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Vite + React + TS</title>
     <script>
-      (function () {
-        const stored = localStorage.getItem("theme");
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const theme = stored || (prefersDark ? "theme-dark" : "theme-light");
-        const html = document.documentElement;
+        (function () {
+            const stored = localStorage.getItem("theme");
+            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            const theme = stored || (prefersDark ? "theme-dark" : "theme-light");
+            const html = document.documentElement;
 
-        // Set early background color
-        if (theme === "theme-dark") {
-          html.style.backgroundColor = "#0F172A"; // Tailwind slate-900 or similar
-          html.style.color = "#F1F5F9"; // optional: text-slate-100
-        } else {
-          html.style.backgroundColor = "#FFFFFF";
-          html.style.color = "#000000";
-        }
+            // Set early background color
+            if (theme === "theme-dark") {
+                html.style.backgroundColor = "#0F172A"; // Tailwind slate-900 or similar
+                html.style.color = "#F1F5F9"; // optional: text-slate-100
+            } else {
+                html.style.backgroundColor = "#FFFFFF";
+                html.style.color = "#000000";
+            }
 
-        html.classList.add(theme);
-      })();
+            html.classList.add(theme);
+        })();
     </script>
 
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+</head>
+<body>
+<div id="root"></div>
+<script type="module" src="/src/main.tsx"></script>
+</body>
 </html>

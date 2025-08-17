@@ -1,6 +1,8 @@
-# React + TypeScript + Vite
+# Some Maimai Data Reader
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+I'm making shit I think is useful. 
+
+Keeping the stuff below so the readme looks less like shit even though it's unrelated redundant and useless info.
 
 Currently, two official plugins are available:
 

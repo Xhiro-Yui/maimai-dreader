@@ -2,7 +2,7 @@ import type {Database} from "sql.js";
 
 type SqlJsDatabase = Database;
 
-function Home({db}: { db: SqlJsDatabase | null }) {
+function Dashboard({db}: { db: SqlJsDatabase | null }) {
     if (!db) return <p>Please upload a database file.</p>
 
     try {
@@ -27,4 +27,4 @@ function Home({db}: { db: SqlJsDatabase | null }) {
     }
 }
 
-export default Home
+export default Dashboard
