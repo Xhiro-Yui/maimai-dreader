@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import SidebarLayout from "./components/layout/SidebarLayout";
 import UploadRecords from "./components/UploadRecords";
 import ThemePicker from "./components/ThemePicker";
 import Dashboard from "./views/Dashboard.tsx";
 import Records from "./views/Records";
-import Other from "./views/Other";
+import SongData from "./views/SongData.tsx";
 import About from "./views/About.tsx";
-import type { Database } from "sql.js";
-import { Home, FileText, Settings, Info } from "lucide-react";
+import type {Database} from "sql.js";
+import {WashingMachine, Music4, FileMusic, Info} from "lucide-react";
 
 type SqlJsDatabase = Database;
 
@@ -16,20 +16,20 @@ export default function App() {
 
     const views = {
         Dashboard: {
-            icon: <Home className="w-5 h-5" />,
-            element: <Dashboard db={db} />,
+            icon: <WashingMachine className="w-5 h-5"/>,
+            element: <Dashboard db={db}/>,
         },
         Records: {
-            icon: <FileText className="w-5 h-5" />,
-            element: <Records db={db} />,
+            icon: <FileMusic className="w-5 h-5"/>,
+            element: <Records db={db}/>,
         },
-        Other: {
-            icon: <Settings className="w-5 h-5" />,
-            element: <Other />,
+        'Song Data': {
+            icon: <Music4 className="w-5 h-5"/>,
+            element: <SongData/>,
         },
         About: {
-            icon: <Info className="w-5 h-5" />,
-            element: <About />,
+            icon: <Info className="w-5 h-5"/>,
+            element: <About/>,
         },
     } as const;
 
@@ -58,8 +58,8 @@ export default function App() {
             titleImageUrl={`${import.meta.env.BASE_URL}prism_plus.png`}
             controls={
                 <>
-                    <UploadRecords onDbLoaded={setDb} />
-                    <ThemePicker />
+                    <UploadRecords onDbLoaded={setDb}/>
+                    <ThemePicker/>
                 </>
             }
             sidebarTabs={tabItems}

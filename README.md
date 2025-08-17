@@ -19,7 +19,7 @@ export default tseslint.config([
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
-      // Other configs...
+      // SongData configs...
 
       // Remove tseslint.configs.recommended and replace with this
       ...tseslint.configs.recommendedTypeChecked,
@@ -28,7 +28,7 @@ export default tseslint.config([
       // Optionally, add this for stylistic rules
       ...tseslint.configs.stylisticTypeChecked,
 
-      // Other configs...
+      // SongData configs...
     ],
     languageOptions: {
       parserOptions: {
@@ -53,7 +53,7 @@ export default tseslint.config([
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
-      // Other configs...
+      // SongData configs...
       // Enable lint rules for React
       reactX.configs['recommended-typescript'],
       // Enable lint rules for React DOM
