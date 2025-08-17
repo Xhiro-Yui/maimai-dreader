@@ -4,6 +4,10 @@ I'm making shit I think is useful.
 
 Keeping the stuff below so the readme looks less like shit even though it's unrelated redundant and useless info.
 
+For my horrible brain.
+Run
+`npm run deploy` to publish changes to GH pages.
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
