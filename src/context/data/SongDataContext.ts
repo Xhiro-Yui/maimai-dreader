@@ -9,6 +9,10 @@ export type Song = {
     lev_adv: string;
     lev_exp: string;
     lev_mas: string;
+    dx_lev_bas: string;
+    dx_lev_adv: string;
+    dx_lev_exp: string;
+    dx_lev_mas: string;
     sort: string;
     title: string;
     title_kana: string;

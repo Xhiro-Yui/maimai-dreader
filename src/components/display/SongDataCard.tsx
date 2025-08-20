@@ -1,55 +1,38 @@
 import React from "react";
-import type {Song} from "../../context/data/SongDataContext";
-import {CoverImage} from "./CoverArt.tsx";
+import type { Song } from "../../context/data/SongDataContext";
+import { CoverImage } from "./CoverArt";
+import { Card } from "../ui/Card";
+import { Badge } from "../ui/Badge";
 
-type SongDataCardProps = {
-    song: Song;
-};
-
-const SongDataCard: React.FC<SongDataCardProps> = ({song}) => {
+const SongDataCard: React.FC<{ song: Song }> = ({ song }) => {
     return (
-        <div
-            className="rounded-2xl shadow-md p-4 mb-4 border"
-            style={{
-                backgroundColor: "var(--color-bg)",
-                color: "var(--color-text)",
-                borderColor: "var(--color-header)", // accent border
-            }}
-        >
-            {/* Header with song title + artist */}
+        <Card className="mb-4">
             <div className="flex items-center space-x-4">
-                <CoverImage song={song}/>
+                <CoverImage song={song} />
                 <div>
-                    <h2 className="text-lg font-bold" style={{color: "var(--color-header)"}}>
-                        {song.title}
-                    </h2>
+                    <h2 className="text-lg font-bold text-[var(--color-header)]">{song.title}</h2>
                     <p className="text-sm opacity-80">{song.artist}</p>
                 </div>
             </div>
 
-            {/* Metadata grid */}
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-4 text-sm">
-                <p><span className="font-semibold">Catcode:</span> {song.catcode}</p>
+                <p><span className="font-semibold">Category Code:</span> {song.catcode}</p>
                 <p><span className="font-semibold">Release:</span> {song.release}</p>
                 <p><span className="font-semibold">Sort:</span> {song.sort}</p>
                 <p><span className="font-semibold">Kana:</span> {song.title_kana}</p>
                 <p><span className="font-semibold">Version:</span> {song.version}</p>
             </div>
 
-            {/* Levels row */}
             <div className="mt-4">
                 <h3 className="text-sm font-semibold mb-2">Levels</h3>
-                <div className="flex space-x-2 text-xs">
-                    <span className="px-2 py-1 rounded bg-[var(--color-basic-row)] text-white">BAS {song.lev_bas}</span>
-                    <span
-                        className="px-2 py-1 rounded bg-[var(--color-advanced-row)] text-white">ADV {song.lev_adv}</span>
-                    <span
-                        className="px-2 py-1 rounded bg-[var(--color-expert-row)] text-white">EXP {song.lev_exp}</span>
-                    <span
-                        className="px-2 py-1 rounded bg-[var(--color-master-row)] text-white">MAS {song.lev_mas}</span>
+                <div className="flex space-x-2">
+                    <Badge level="basic">BAS {song.lev_bas || song.dx_lev_bas}</Badge>
+                    <Badge level="advanced">ADV {song.lev_adv || song.dx_lev_adv}</Badge>
+                    <Badge level="expert">EXP {song.lev_exp || song.dx_lev_exp}</Badge>
+                    <Badge level="master">MAS {song.lev_mas || song.dx_lev_mas}</Badge>
                 </div>
             </div>
-        </div>
+        </Card>
     );
 };
 
