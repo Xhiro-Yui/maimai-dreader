@@ -55,7 +55,7 @@ export default function App() {
     return (
         <SidebarLayout
             title="MaiMai Data Reader"
-            titleImageUrl={`${import.meta.env.BASE_URL}prism_plus.png`}
+            titleImageUrl={`${import.meta.env.BASE_URL}/image/prism_plus.png`}
             controls={
                 <>
                     <UploadRecords onDbLoaded={setDb}/>

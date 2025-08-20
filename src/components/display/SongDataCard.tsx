@@ -1,27 +1,24 @@
 import React from "react";
-import type { Song } from "../../context/data/SongDataContext";
+import type {Song} from "../../context/data/SongDataContext";
+import {CoverImage} from "./CoverArt.tsx";
 
 type SongDataCardProps = {
     song: Song;
 };
 
-const SongDataCard: React.FC<SongDataCardProps> = ({ song }) => {
+const SongDataCard: React.FC<SongDataCardProps> = ({song}) => {
     return (
         <div
-            className="rounded-2xl shadow-md p-4 mb-4 border border-gray-300 dark:border-gray-700"
+            className="rounded-2xl shadow-md p-4 mb-4 border"
             style={{
                 backgroundColor: "var(--color-bg)",
                 color: "var(--color-text)",
+                borderColor: "var(--color-header)", // accent border
             }}
         >
-
             {/* Header with song title + artist */}
             <div className="flex items-center space-x-4">
-                <img
-                    src={song.image_url}
-                    alt={song.title}
-                    className="w-20 h-20 rounded-lg object-cover shadow"
-                />
+                <CoverImage song={song}/>
                 <div>
                     <h2 className="text-lg font-bold" style={{color: "var(--color-header)"}}>
                         {song.title}
